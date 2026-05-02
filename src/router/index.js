@@ -16,6 +16,8 @@ import KeyframeResults from '../views/KeyframeResults.vue'
 import ConsistencyCheck from '../views/ConsistencyCheck.vue'
 import ProjectPreview from '../views/ProjectPreview.vue'
 import ShotDetail from '../views/ShotDetail.vue'
+import History from '../views/History.vue'
+import Settings from '../views/Settings.vue'
 
 const routes = [
   {
@@ -23,7 +25,9 @@ const routes = [
     component: BaseLayout,
     redirect: '/dashboard',
     children: [
-      { path: 'dashboard', component: Dashboard }
+      { path: 'dashboard', component: Dashboard },
+      { path: 'history', component: History },
+      { path: 'settings', component: Settings }
     ]
   },
   {

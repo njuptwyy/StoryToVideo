@@ -15,18 +15,18 @@
     </div>
     
     <div class="project-grid">
-      <div class="project-card" v-for="i in 4" :key="i">
+      <div class="project-card" v-for="project in recentProjects" :key="project.id">
         <div class="card-header">
-          <span class="status-tag success">已生成</span>
-          <span class="time-text">2026-04-16</span>
+          <span class="status-tag success">{{ project.status }}</span>
+          <span class="time-text">{{ project.date }}</span>
         </div>
         <div class="card-body">
-          <h4>星际穿越狂想曲 - 预演 {{ i }}</h4>
-          <p class="summary">包含 5 个角色，12 个场景，24 个独立分镜...</p>
+          <h4>{{ project.name }}</h4>
+          <p class="summary">{{ project.summary }}</p>
         </div>
         <div class="card-footer">
           <button class="btn-text">继续编辑</button>
-          <button class="btn-text delete">删除</button>
+          <button class="btn-text delete" @click="projectStore.deleteProject(project.id)">删除</button>
         </div>
       </div>
     </div>
@@ -35,6 +35,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { projectStore } from '../store/projectStore'
 
 const router = useRouter()
 
@@ -42,6 +43,9 @@ const router = useRouter()
 const goToCreateProject = () => {
   router.push('/project/create')
 }
+
+// 使用共享数据
+const recentProjects = projectStore.getRecentProjects()
 </script>
 
 <style scoped>

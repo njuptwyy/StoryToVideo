@@ -10,13 +10,13 @@
           <i class="icon-home"></i> 首页工作台
         </router-link>
         
-        <router-link to="/dashboard" class="menu-item" active-class="active">
+        <router-link to="/history" class="menu-item" active-class="active">
           <i class="icon-history"></i> 历史仓库
         </router-link>
         
-        <a href="javascript:alert('系统设置功能开发中...')" class="menu-item">
+        <router-link to="/settings" class="menu-item" active-class="active">
           <i class="icon-settings"></i> 系统设置
-        </a>
+        </router-link>
       </nav>
     </aside>
 
