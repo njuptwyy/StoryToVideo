@@ -1,6 +1,14 @@
-# my-vue-app
+# Story Compiler
 
-This template should help get you started developing with Vue 3 in Vite.
+Story Compiler 是一个面向长文本创作场景的可控分镜与视觉预演系统。
+
+## 项目文档
+
+- [第一章 功能介绍](docs/Chapter1_Feature_Introduction.md)
+
+## Quick Overview
+
+This project is built with Vue 3 and Vite.
 
 ## Recommended IDE Setup
 
