@@ -4,6 +4,13 @@
       <h2>历史仓库</h2>
       <p>查看您过往创建的所有故事项目</p>
     </div>
+
+    <div class="history-summary">
+      <div class="summary-card" v-for="item in summaryCards" :key="item.label">
+        <span class="summary-value">{{ item.value }}</span>
+        <span class="summary-label">{{ item.label }}</span>
+      </div>
+    </div>
     
     <!-- 最新的4条项目（与"最近项目"同步） -->
     <div class="project-grid">
@@ -50,12 +57,22 @@
 <script setup>
 import { computed } from 'vue'
 import { projectStore } from '../store/projectStore'
+import { getProjectDigest } from '../data/projectInsights'
 
 // 获取最新的4条项目
 const recentProjects = computed(() => projectStore.getRecentProjects())
 
 // 获取更早的项目（第5条及之后）
 const olderProjects = computed(() => projectStore.getHistoryProjects())
+
+const projectDigest = computed(() => getProjectDigest(projectStore.projects))
+
+const summaryCards = computed(() => [
+  { label: '总计', value: projectDigest.value.metrics.total },
+  { label: '已生成', value: projectDigest.value.metrics.generated },
+  { label: '生成中', value: projectDigest.value.metrics.generating },
+  { label: '完成率', value: `${projectDigest.value.metrics.completionRate}%` }
+])
 </script>
 
 <style scoped>
@@ -76,6 +93,34 @@ const olderProjects = computed(() => projectStore.getHistoryProjects())
   margin: 0;
   color: #666;
   font-size: 14px;
+}
+
+.history-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.summary-card {
+  background: linear-gradient(180deg, #ffffff 0%, #fdfbf3 100%);
+  border: 1px solid #f1e4c7;
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summary-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.summary-label {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 700;
 }
 
 .project-grid {

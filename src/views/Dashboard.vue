@@ -10,6 +10,14 @@
       </button>
     </div>
 
+    <div class="metrics-grid">
+      <div class="metric-card" v-for="item in metricsCards" :key="item.label">
+        <span class="metric-value">{{ item.value }}</span>
+        <span class="metric-label">{{ item.label }}</span>
+        <span class="metric-hint">{{ item.hint }}</span>
+      </div>
+    </div>
+
     <div class="section-title">
       <h3>最近项目</h3>
     </div>
@@ -34,8 +42,10 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { projectStore } from '../store/projectStore'
+import { getProjectDigest } from '../data/projectInsights'
 
 const router = useRouter()
 
@@ -45,7 +55,31 @@ const goToCreateProject = () => {
 }
 
 // 使用共享数据
-const recentProjects = projectStore.getRecentProjects()
+const recentProjects = computed(() => projectStore.getRecentProjects())
+const projectDigest = computed(() => getProjectDigest(projectStore.projects))
+
+const metricsCards = computed(() => [
+  {
+    label: '总项目数',
+    value: projectDigest.value.metrics.total,
+    hint: `最近记录：${projectDigest.value.metrics.latestDate}`
+  },
+  {
+    label: '已生成项目',
+    value: projectDigest.value.metrics.generated,
+    hint: `完成率 ${projectDigest.value.metrics.completionRate}%`
+  },
+  {
+    label: '生成中任务',
+    value: projectDigest.value.metrics.generating,
+    hint: `待继续推进的项目`
+  },
+  {
+    label: '异常项目',
+    value: projectDigest.value.metrics.failed,
+    hint: '需要回溯修复'
+  }
+])
 </script>
 
 <style scoped>
@@ -81,6 +115,40 @@ const recentProjects = projectStore.getRecentProjects()
 .btn-primary:hover { opacity: 0.9; }
 
 .section-title h3 { margin: 0; color: #333; border-left: 4px solid #D4A34B; padding-left: 10px; }
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.metric-card {
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  border: 1px solid #e7eef8;
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.metric-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.metric-label {
+  font-size: 14px;
+  color: #4b5563;
+  font-weight: 700;
+}
+
+.metric-hint {
+  font-size: 12px;
+  color: #6b7280;
+}
 
 .project-grid {
   display: grid;
