@@ -14,18 +14,27 @@
     </main>
   </div>
 
-  <div class="step-indicator">
-    <span :class="{ active: $route.path.includes('create') }">故事输入</span> ➜ 
-    <span :class="{ active: $route.path.includes('structure') }">结构解析</span> ➜ 
-    <span :class="{ active: $route.path.includes('characters') || $route.path.includes('scenes') }">设定</span> ➜ 
-    <span :class="{ active: $route.path.includes('storyboard') }">分镜规划</span>
+  <div class="pipeline-strip">
+    <span
+      v-for="step in storyPipeline"
+      :key="step.id"
+      class="pipeline-step"
+      :class="{ active: activeStep === step.id }"
+    >
+      {{ step.label }}
+    </span>
   </div>
-  
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { resolvePipelineStep, storyPipeline } from '../data/storyPipeline'
+
 const router = useRouter()
+const route = useRoute()
+
+const activeStep = computed(() => resolvePipelineStep(route.path))
 
 const goBack = () => {
   router.push('/dashboard')
@@ -60,6 +69,31 @@ const goBack = () => {
 }
 .step-indicator .dim {
   color: #999; font-weight: normal;
+}
+
+.pipeline-strip {
+  padding: 14px 24px 0;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  color: #666;
+  font-size: 13px;
+}
+
+.pipeline-step {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #E4E7ED;
+  background: #fff;
+  transition: all 0.2s ease;
+}
+
+.pipeline-step.active {
+  background: linear-gradient(135deg, #3698F5, #3CB4D5);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(54, 152, 245, 0.18);
 }
 
 .workspace-content {
