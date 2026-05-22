@@ -7,6 +7,7 @@ import { ExportService } from './services/exportService.js';
 import { AuditService } from './services/auditService.js';
 import { RequestTraceService } from './services/requestTraceService.js';
 import { parseJsonBody, sendJson, createRouter } from './router.js';
+import { buildRequestContext, describeRequestContext } from './core/requestContext.js';
 
 export function createApp() {
   const projectService = new ProjectService();
@@ -35,6 +36,7 @@ export function createApp() {
     const body = await parseJsonBody(request);
     return auditService.replay(Array.isArray(body.events) ? body.events : []);
   });
+  router.get('/audit/context', async request => describeRequestContext(buildRequestContext(request)));
 
   router.get('/summary', async () => reportService.buildSnapshot());
   router.get('/overview', async () => reportService.buildOverview());
@@ -100,21 +102,18 @@ export function createApp() {
   });
 
   async function handle(request, response) {
-    const traceHandle = requestTraceService.begin({
-      method: request.method,
-      pathname: new URL(request.url, 'http://localhost').pathname,
-      headers: request.headers
-    });
+    const requestContext = buildRequestContext(request);
+    const traceHandle = requestTraceService.begin(requestContext);
     try {
       const result = await router.dispatch(request);
       await sendJson(response, 200, result);
-      requestTraceService.end(traceHandle, { status: 200, context: { route: 'ok' } });
+      requestTraceService.end(traceHandle, { status: 200, context: { route: 'ok', ...requestContext } });
     } catch (error) {
       const normalized = normalizeError(error);
       await sendJson(response, normalized.status || 500, errorToJSON(normalized));
       requestTraceService.end(traceHandle, {
         status: normalized.status || 500,
-        context: { errorCode: normalized.code }
+        context: { errorCode: normalized.code, ...requestContext }
       });
     }
   }

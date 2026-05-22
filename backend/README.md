@@ -5,6 +5,7 @@ This directory contains a standalone backend-style source tree for competition s
 ## Modules
 - core: shared error models and assertions
 - core/logger: runtime logging helper
+- core/requestContext: request metadata helper
 - repositories: in-memory storage, project repository, and audit repository
 - services: project, workflow, report, analytics, export, audit, and request tracing
 - utils: ids and time helpers
@@ -19,6 +20,7 @@ This directory contains a standalone backend-style source tree for competition s
 - /audit/traces
 - /audit/dashboard
 - /audit/replay
+- /audit/context
 
 ## Notes
 - This layer focuses on runtime observability.

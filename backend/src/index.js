@@ -8,6 +8,7 @@ export { ExportService } from './services/exportService.js';
 export { AuditService } from './services/auditService.js';
 export { RequestTraceService } from './services/requestTraceService.js';
 export { Logger } from './core/logger.js';
+export { buildRequestContext, describeRequestContext } from './core/requestContext.js';
 export { ProjectRepository } from './repositories/projectRepository.js';
 export { AuditRepository } from './repositories/auditRepository.js';
 export { MemoryStore } from './repositories/memoryStore.js';
