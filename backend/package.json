@@ -1,0 +1,8 @@
+{
+  "name": "story-to-video-backend-audit",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}

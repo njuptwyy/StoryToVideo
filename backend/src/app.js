@@ -4,6 +4,8 @@ import { WorkflowService } from './services/workflowService.js';
 import { ReportService } from './services/reportService.js';
 import { AnalyticsService } from './services/analyticsService.js';
 import { ExportService } from './services/exportService.js';
+import { AuditService } from './services/auditService.js';
+import { RequestTraceService } from './services/requestTraceService.js';
 import { parseJsonBody, sendJson, createRouter } from './router.js';
 
 export function createApp() {
@@ -12,6 +14,8 @@ export function createApp() {
   const reportService = new ReportService(projectService);
   const analyticsService = new AnalyticsService(projectService);
   const exportService = new ExportService(projectService, analyticsService, reportService);
+  const auditService = new AuditService();
+  const requestTraceService = new RequestTraceService(auditService);
 
   const router = createRouter();
 
@@ -19,8 +23,18 @@ export function createApp() {
     ok: true,
     service: 'story-to-video-backend',
     timestamp: new Date().toISOString(),
+    audit: auditService.getLogSummary(),
     report: reportService.buildHealthCheck()
   }));
+
+  router.get('/audit/summary', async () => auditService.getAuditSummary());
+  router.get('/audit/records', async () => auditService.listLatestRecords());
+  router.get('/audit/traces', async () => auditService.listLatestTraces());
+  router.get('/audit/dashboard', async () => auditService.buildDashboard());
+  router.post('/audit/replay', async request => {
+    const body = await parseJsonBody(request);
+    return auditService.replay(Array.isArray(body.events) ? body.events : []);
+  });
 
   router.get('/summary', async () => reportService.buildSnapshot());
   router.get('/overview', async () => reportService.buildOverview());
@@ -86,12 +100,22 @@ export function createApp() {
   });
 
   async function handle(request, response) {
+    const traceHandle = requestTraceService.begin({
+      method: request.method,
+      pathname: new URL(request.url, 'http://localhost').pathname,
+      headers: request.headers
+    });
     try {
       const result = await router.dispatch(request);
       await sendJson(response, 200, result);
+      requestTraceService.end(traceHandle, { status: 200, context: { route: 'ok' } });
     } catch (error) {
       const normalized = normalizeError(error);
       await sendJson(response, normalized.status || 500, errorToJSON(normalized));
+      requestTraceService.end(traceHandle, {
+        status: normalized.status || 500,
+        context: { errorCode: normalized.code }
+      });
     }
   }
 
@@ -102,6 +126,8 @@ export function createApp() {
     reportService,
     analyticsService,
     exportService,
+    auditService,
+    requestTraceService,
     router
   };
 }
