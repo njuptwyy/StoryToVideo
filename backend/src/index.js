@@ -7,5 +7,14 @@ export { AnalyticsService } from './services/analyticsService.js';
 export { ExportService } from './services/exportService.js';
 export { ProjectRepository } from './repositories/projectRepository.js';
 export { MemoryStore } from './repositories/memoryStore.js';
+export { createRuntimeConfig, loadConfig, describeConfig } from './config/loader.js';
+export {
+	validateProjectInput,
+	validateStageKey,
+	validateSceneInput,
+	validateTaskInput,
+	validateBatchProjectIds,
+	summarizeValidationRules
+} from './validation/index.js';
 export * from './domain/catalog.js';
 export * from './core/errors.js';
