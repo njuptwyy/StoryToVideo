@@ -6,6 +6,7 @@ import { AnalyticsService } from './services/analyticsService.js';
 import { ExportService } from './services/exportService.js';
 import { parseJsonBody, sendJson, createRouter } from './router.js';
 import { buildPayloadFactory } from './serialization/index.js';
+import { buildSerializationGuide, buildRouteManifest, buildFieldMatrix } from './serialization/index.js';
 
 export function createApp() {
   const projectService = new ProjectService();
@@ -90,6 +91,9 @@ export function createApp() {
   router.get('/serialize/snapshot', async () => payloadFactory.snapshot());
   router.get('/serialize/export/:projectId/package', async request => payloadFactory.exportPackage(request.params.projectId));
   router.get('/serialize/export/:projectId/manifest', async request => payloadFactory.exportManifest(request.params.projectId));
+  router.get('/serialize/guide', async () => buildSerializationGuide());
+  router.get('/serialize/routes', async () => buildRouteManifest());
+  router.get('/serialize/fields/:id', async request => buildFieldMatrix(projectService.get(request.params.id)));
 
   router.use(async context => {
     throw new AppError('NOT_FOUND', `Route ${context.method} ${context.pathname} not found`, {
@@ -116,6 +120,9 @@ export function createApp() {
     analyticsService,
     exportService,
     payloadFactory,
+    buildSerializationGuide,
+    buildRouteManifest,
+    buildFieldMatrix,
     router
   };
 }

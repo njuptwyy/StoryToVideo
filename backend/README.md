@@ -24,6 +24,9 @@ This directory contains a standalone backend-style source tree for competition s
 - /serialize/snapshot
 - /serialize/export/:projectId/package
 - /serialize/export/:projectId/manifest
+- /serialize/guide
+- /serialize/routes
+- /serialize/fields/:id
 
 ## Notes
 - This layer is intentionally decoupled from the Vue frontend.
