@@ -5,6 +5,8 @@ export { WorkflowService } from './services/workflowService.js';
 export { ReportService } from './services/reportService.js';
 export { AnalyticsService } from './services/analyticsService.js';
 export { ExportService } from './services/exportService.js';
+export { serializeProjectCard, serializeProjectDetail, serializeProjectList, serializeStage, serializeSummary } from './serialization/index.js';
+export { buildPayloadFactory } from './serialization/index.js';
 export { ProjectRepository } from './repositories/projectRepository.js';
 export { MemoryStore } from './repositories/memoryStore.js';
 export * from './domain/catalog.js';
