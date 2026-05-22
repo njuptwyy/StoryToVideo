@@ -11,9 +11,11 @@ This directory contains a standalone backend-style source tree for competition s
 - repositories: in-memory storage and project repository
 - services: project, workflow, report, analytics, and export services
 - controllers: route registration split by domain
+- presentation: console-formatting helpers for CLI output
 - router: request routing and body parsing
 - app: application wiring
 - server: HTTP bootstrap
+- cli: console summary generator
 
 ## Debug routes
 - /config
@@ -25,6 +27,7 @@ This directory contains a standalone backend-style source tree for competition s
 - /debug/batch-preview
 
 ## Tests
+- backend/test: Node.js service-level test suite
 - test: project service behavior
 - test: workflow transitions
 - test: report snapshots
@@ -36,3 +39,4 @@ This directory contains a standalone backend-style source tree for competition s
 - The code is organized to show clear responsibilities per module.
 - It is intended for screenshots, code review, and API structure demos.
 - The `backend/test` folder contains a Node.js test suite.
+- The `backend/src/cli.js` entry can print a compact backend summary for demos.
