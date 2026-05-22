@@ -6,6 +6,7 @@ export { ReportService } from './services/reportService.js';
 export { AnalyticsService } from './services/analyticsService.js';
 export { ExportService } from './services/exportService.js';
 export { createCliContext, buildCliSummary, runCli } from './cli.js';
+export { buildSamplePayloads, createSampleCollection } from './examples/generateSamples.js';
 export { ProjectRepository } from './repositories/projectRepository.js';
 export { MemoryStore } from './repositories/memoryStore.js';
 export { createRuntimeConfig, loadConfig, describeConfig } from './config/loader.js';
