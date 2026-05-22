@@ -6,6 +6,7 @@ import { AnalyticsService } from './services/analyticsService.js';
 import { ExportService } from './services/exportService.js';
 import { AuditService } from './services/auditService.js';
 import { RequestTraceService } from './services/requestTraceService.js';
+import { AuditExporter } from './services/auditExporter.js';
 import { parseJsonBody, sendJson, createRouter } from './router.js';
 import { buildRequestContext, describeRequestContext } from './core/requestContext.js';
 
@@ -17,6 +18,7 @@ export function createApp() {
   const exportService = new ExportService(projectService, analyticsService, reportService);
   const auditService = new AuditService();
   const requestTraceService = new RequestTraceService(auditService);
+  const auditExporter = new AuditExporter(auditService);
 
   const router = createRouter();
 
@@ -32,6 +34,8 @@ export function createApp() {
   router.get('/audit/records', async () => auditService.listLatestRecords());
   router.get('/audit/traces', async () => auditService.listLatestTraces());
   router.get('/audit/dashboard', async () => auditService.buildDashboard());
+  router.get('/audit/markdown', async () => auditExporter.buildMarkdownReport());
+  router.get('/audit/plain', async () => auditExporter.buildPlainTextReport());
   router.post('/audit/replay', async request => {
     const body = await parseJsonBody(request);
     return auditService.replay(Array.isArray(body.events) ? body.events : []);
@@ -127,6 +131,7 @@ export function createApp() {
     exportService,
     auditService,
     requestTraceService,
+    auditExporter,
     router
   };
 }

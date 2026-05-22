@@ -8,6 +8,7 @@ This directory contains a standalone backend-style source tree for competition s
 - core/requestContext: request metadata helper
 - repositories: in-memory storage, project repository, and audit repository
 - services: project, workflow, report, analytics, export, audit, and request tracing
+- services: project, workflow, report, analytics, export, audit, request tracing, and audit export
 - utils: ids and time helpers
 - domain: workflow catalog and blueprints
 - router: request routing and body parsing
@@ -21,6 +22,8 @@ This directory contains a standalone backend-style source tree for competition s
 - /audit/dashboard
 - /audit/replay
 - /audit/context
+- /audit/markdown
+- /audit/plain
 
 ## Notes
 - This layer focuses on runtime observability.
