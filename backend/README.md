@@ -6,6 +6,31 @@ This directory contains a standalone backend-style source tree for competition s
 - config: runtime config loading and profile defaults
 - validation: request payload rules and preview helpers
 - core: shared error models and assertions
+- core/logger: runtime logging helper
+- core/requestContext: request metadata helper
+- repositories: in-memory storage, project repository, and audit repository
+- services: project, workflow, report, analytics, export, audit, and request tracing
+- services: project, workflow, report, analytics, export, audit, request tracing, and audit export
+- utils: ids and time helpers
+- domain: workflow catalog and blueprints
+- router: request routing and body parsing
+- app: application wiring
+- server: HTTP bootstrap
+
+## Audit routes
+- /audit/summary
+- /audit/records
+- /audit/traces
+- /audit/dashboard
+- /audit/replay
+- /audit/context
+- /audit/markdown
+- /audit/plain
+
+## Notes
+- This layer focuses on runtime observability.
+- It is intended for screenshots, code review, and operational demos.
+- core: shared error models and assertions
 - utils: ids and time helpers
 - domain: workflow catalog and blueprints
 - repositories: in-memory storage and project repository
