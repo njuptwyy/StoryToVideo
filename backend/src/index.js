@@ -12,6 +12,8 @@ export { RequestTraceService } from './services/requestTraceService.js';
 export { AuditExporter } from './services/auditExporter.js';
 export { Logger } from './core/logger.js';
 export { buildRequestContext, describeRequestContext } from './core/requestContext.js';
+export { serializeProjectCard, serializeProjectDetail, serializeProjectList, serializeStage, serializeSummary } from './serialization/index.js';
+export { buildPayloadFactory, buildSerializationGuide, buildRouteManifest, buildFieldMatrix } from './serialization/index.js';
 export { ProjectRepository } from './repositories/projectRepository.js';
 export { AuditRepository } from './repositories/auditRepository.js';
 export { MemoryStore } from './repositories/memoryStore.js';

@@ -1,17 +1,15 @@
-# Audit Tests
+# Backend Tests
 
-This folder covers audit logging and request tracing behavior.
+This folder contains the Node.js test suite for the backend source tree.
 
 ## Coverage
+- config loading
+- payload validation
+- basic app route wiring
 - logger summaries
 - audit records
 - request traces
 - route tracing through the app layer
-
-## Validation Tests
-This folder contains focused tests for the configuration and validation layer.
-
-### Coverage
-- config loading
-- payload validation
-- basic app route wiring
+- project cards and details
+- summary serialization
+- payload factory outputs

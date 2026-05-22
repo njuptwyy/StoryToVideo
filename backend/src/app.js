@@ -25,6 +25,7 @@ import {
   registerExportRoutes
 } from './controllers/index.js';
 import { buildRequestContext, describeRequestContext } from './core/requestContext.js';
+import { buildPayloadFactory, buildSerializationGuide, buildRouteManifest, buildFieldMatrix } from './serialization/index.js';
 
 export function createApp() {
   const projectService = new ProjectService();
@@ -35,6 +36,7 @@ export function createApp() {
   const auditService = new AuditService();
   const requestTraceService = new RequestTraceService(auditService);
   const auditExporter = new AuditExporter(auditService);
+  const payloadFactory = buildPayloadFactory({ projectService, workflowService, reportService, analyticsService, exportService });
   const runtimeConfig = createRuntimeConfig();
 
   const router = createRouter();
@@ -81,6 +83,20 @@ export function createApp() {
     return { projectIds: validateBatchProjectIds(body.projectIds) };
   });
 
+  router.get('/serialize/projects', async request => payloadFactory.projectList(request.query));
+  router.get('/serialize/projects/:id/card', async request => payloadFactory.projectCard(request.params.id));
+  router.get('/serialize/projects/:id/detail', async request => payloadFactory.projectDetail(request.params.id));
+  router.get('/serialize/workflow/:stageKey', async request => payloadFactory.stage(request.params.stageKey));
+  router.get('/serialize/pipeline', async () => payloadFactory.pipeline());
+  router.get('/serialize/summary', async () => payloadFactory.summary());
+  router.get('/serialize/overview', async () => payloadFactory.overview());
+  router.get('/serialize/snapshot', async () => payloadFactory.snapshot());
+  router.get('/serialize/export/:projectId/package', async request => payloadFactory.exportPackage(request.params.projectId));
+  router.get('/serialize/export/:projectId/manifest', async request => payloadFactory.exportManifest(request.params.projectId));
+  router.get('/serialize/guide', async () => buildSerializationGuide());
+  router.get('/serialize/routes', async () => buildRouteManifest());
+  router.get('/serialize/fields/:id', async request => buildFieldMatrix(projectService.get(request.params.id)));
+
   router.use(async context => {
     throw new AppError('NOT_FOUND', `Route ${context.method} ${context.pathname} not found`, {
       pathname: context.pathname,
@@ -115,6 +131,10 @@ export function createApp() {
     auditService,
     requestTraceService,
     auditExporter,
+    payloadFactory,
+    buildSerializationGuide,
+    buildRouteManifest,
+    buildFieldMatrix,
     router
   };
 }

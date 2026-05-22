@@ -9,34 +9,12 @@ This directory contains a standalone backend-style source tree for competition s
 - core/logger: runtime logging helper
 - core/requestContext: request metadata helper
 - repositories: in-memory storage, project repository, and audit repository
-- services: project, workflow, report, analytics, export, audit, and request tracing
 - services: project, workflow, report, analytics, export, audit, request tracing, and audit export
-- utils: ids and time helpers
-- domain: workflow catalog and blueprints
-- router: request routing and body parsing
-- app: application wiring
-- server: HTTP bootstrap
-
-## Audit routes
-- /audit/summary
-- /audit/records
-- /audit/traces
-- /audit/dashboard
-- /audit/replay
-- /audit/context
-- /audit/markdown
-- /audit/plain
-
-## Notes
-- This layer focuses on runtime observability.
-- It is intended for screenshots, code review, and operational demos.
-- core: shared error models and assertions
-- utils: ids and time helpers
-- domain: workflow catalog and blueprints
-- repositories: in-memory storage and project repository
-- services: project, workflow, report, analytics, and export services
 - controllers: route registration split by domain
+- serialization: DTO serializers and payload builders
 - presentation: console-formatting helpers for CLI output
+- utils: ids and time helpers
+- domain: workflow catalog and blueprints
 - router: request routing and body parsing
 - app: application wiring
 - server: HTTP bootstrap
@@ -51,12 +29,40 @@ This directory contains a standalone backend-style source tree for competition s
 - /debug/stage-preview
 - /debug/batch-preview
 
+## Audit routes
+- /audit/summary
+- /audit/records
+- /audit/traces
+- /audit/dashboard
+- /audit/replay
+- /audit/context
+- /audit/markdown
+- /audit/plain
+
+## Serialization routes
+- /serialize/projects
+- /serialize/projects/:id/card
+- /serialize/projects/:id/detail
+- /serialize/workflow/:stageKey
+- /serialize/pipeline
+- /serialize/summary
+- /serialize/overview
+- /serialize/snapshot
+- /serialize/export/:projectId/package
+- /serialize/export/:projectId/manifest
+- /serialize/guide
+- /serialize/routes
+- /serialize/fields/:id
+
 ## Tests
 - backend/test: Node.js service-level test suite
-- test: project service behavior
-- test: workflow transitions
-- test: report snapshots
-- test: analytics and export outputs
+- config validation tests
+- app route tests
+- audit logging tests
+- request context tests
+- serialization tests
+- payload builder tests
+- serialization guide tests
 
 ## Notes
 - This layer is intentionally decoupled from the Vue frontend.
@@ -65,3 +71,4 @@ This directory contains a standalone backend-style source tree for competition s
 - It is intended for screenshots, code review, and API structure demos.
 - The `backend/test` folder contains a Node.js test suite.
 - The `backend/src/cli.js` entry can print a compact backend summary for demos.
+- It is intended for screenshots and data-shaping demos.
